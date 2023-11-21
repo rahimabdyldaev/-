@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Добавление имен</title>
+    <style>
+        .name-list {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Список имён</h1>
+    <input type="text" id="nameInput" placeholder="Введите имя">
+    <button onclick="addName()">Добавить</button>
+    <div id="nameList"></div>
+
+    <script>
+const nameInput = document.getElementById('nameInput');
+const nameList = document.getElementById('nameList');
+
+function addName() {
+    const name = nameInput.value;
+    if (name) {
+        const nameItem = document.createElement('div');
+        nameItem.classList.add('name-list');
+        nameItem.textContent = name;
+        nameList.appendChild(nameItem);
+        
+        nameInput.value = '';
+    }
+}
+
+window.addEventListener('load', () => {
+    const savedNames = localStorage.getItem('names');
+    if (savedNames) {
+        const names = JSON.parse(savedNames);
+
+        names.forEach(name => {
+            const nameItem = document.createElement('div');
+            nameItem.classList.add('name-list');
+            nameItem.textContent = name;
+            nameList.appendChild(nameItem);
+        });
+    }
+});
+
+window.addEventListener('beforeunload', () => {
+    const nameItems = nameList.getElementsByClassName('name-list');
+    const names = Array.from(nameItems).map(item => item.textContent);
+    localStorage.setItem('names', JSON.stringify(names));
+});
+    </script>
+</body>
+</html>
